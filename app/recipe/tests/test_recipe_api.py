@@ -24,10 +24,10 @@ def create_recipe(user, **params):  # helper function for testing purpose
         'title': 'Sample recipe title',
         'time_minutes': 22,
         'price': Decimal('5.25'),
-        'decription': 'Sample description',
+        'description': 'Sample description',
         'link': 'http://example.com/recipe.pdf',
     }
-    defaults.update(params)  # note how to use/update universal **params
+    defaults.update(params)  # note how to use or update universal (**params)
 
     recipe = Recipe.objects.create(user=user, **defaults)
     return recipe
