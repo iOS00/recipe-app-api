@@ -30,7 +30,7 @@ class TagSerializer(serializers.ModelSerializer):
 
 class RecipeSerializer(serializers.ModelSerializer):
     """Seriualizer for recipes."""
-    tags = TagSerializer(many=True, required=False)  # nested serializer, many=True(list of items)
+    tags = TagSerializer(many=True, required=False)
     ingredients = IngredientSerializer(many=True, required=False)
 
     class Meta:
@@ -39,16 +39,16 @@ class RecipeSerializer(serializers.ModelSerializer):
             'id', 'title', 'time_minutes', 'price', 'link', 'tags',
                   'ingredients',
         ]
-        read_only_fields = ['id']  # to protect from changing manually
+        read_only_fields = ['id']
 
     def _get_or_create_tags(self, tags, recipe):
         """Handle getting or creating tags as needed."""
-        auth_user = self.context['request'].user  # context param. is required within serializer
+        auth_user = self.context['request'].user
         for tag in tags:
             tag_obj, created = Tag.objects.get_or_create(
                 user=auth_user,
                 **tag,
-            )  # NB! get_or_create() - to avoid creating duplicates, **tag-for future features
+            )
             recipe.tags.add(tag_obj)
 
     def _get_or_create_ingredients(self, ingredients, recipe):
@@ -61,9 +61,9 @@ class RecipeSerializer(serializers.ModelSerializer):
             )
             recipe.ingredients.add(ingredient_obj)
 
-    def create(self, validated_data):  # override nested serializer(tag) from read-only method
+    def create(self, validated_data):
         """Create a recipe."""
-        tags = validated_data.pop('tags', [])  # remove and assign
+        tags = validated_data.pop('tags', [])
         ingredients = validated_data.pop('ingredients', [])
         recipe = Recipe.objects.create(**validated_data)
         self._get_or_create_tags(tags, recipe)
@@ -75,11 +75,11 @@ class RecipeSerializer(serializers.ModelSerializer):
         """Update recipe."""
         tags = validated_data.pop('tags', None)
         ingredients = validated_data.pop('ingredients', None)
-        if tags is not None:  # if tags is [], "" etc.
+        if tags is not None:
             instance.tags.clear()
             self._get_or_create_tags(tags, instance)
-        if ingredients is not None:  # can be [], "" etc.
-            instance.ingredients.clear()  # to make sure all is cleared
+        if ingredients is not None:
+            instance.ingredients.clear()
             self._get_or_create_ingredients(ingredients, instance)
 
         for attr, value in validated_data.items():
@@ -89,10 +89,10 @@ class RecipeSerializer(serializers.ModelSerializer):
         return instance
 
 
-class RecipeDetailSerializer(RecipeSerializer):  # extension of RecipeSerializer class
+class RecipeDetailSerializer(RecipeSerializer):
     """Serializer for recipe detail view."""
 
-    class Meta(RecipeSerializer.Meta):  # inheriting Meta class from parent in Django
+    class Meta(RecipeSerializer.Meta):
         fields = RecipeSerializer.Meta.fields + ['description', 'image']
 
 

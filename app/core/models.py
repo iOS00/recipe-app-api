@@ -18,18 +18,18 @@ def recipe_image_file_path(instance, filename):
     ext = os.path.splitext(filename)[1]
     filename = f'{uuid.uuid4()}{ext}'
 
-    return os.path.join('uploads', 'recipe', filename)  # use os to make path readable
+    return os.path.join('uploads', 'recipe', filename)
 
 
 class UserManager(BaseUserManager):
     """Manager for users."""
 
-    def create_user(self, email, password=None, **extra_fields):  # **extra_field for future possible flexibility
+    def create_user(self, email, password=None, **extra_fields):
         """Create, save and return a new user."""
         if not email:
             raise ValueError('User must have an email address.')
-        user = self.model(email=self.normalize_email(email), **extra_fields)  # normalize_email Django method
-        user.set_password(password)  # will be encrypted with hash metod
+        user = self.model(email=self.normalize_email(email), **extra_fields)
+        user.set_password(password)
         user.save(using=self._db)
 
         return user
@@ -51,28 +51,28 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
-    objects = UserManager()  # to connect classes in Django
+    objects = UserManager()
 
-    USERNAME_FIELD = 'email'  # we replace the 'username' that comes as default from base class
+    USERNAME_FIELD = 'email'
 
 
-class Recipe(models.Model):  # based on Django Model base class
+class Recipe(models.Model):
     """Recipe object."""
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-    )  # Foreign Key relation with AUTH_USER_MODEL defined in settings.py(delete user->recipes)
+    )
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     time_minutes = models.IntegerField()
     price = models.DecimalField(max_digits=5, decimal_places=2)
     link = models.CharField(max_length=255, blank=True)
-    tags = models.ManyToManyField('Tag')  # allows many recipes have many tags
+    tags = models.ManyToManyField('Tag')
     ingredients = models.ManyToManyField('Ingredient')
-    image = models.ImageField(null=True, upload_to=recipe_image_file_path)  # don't call function()
+    image = models.ImageField(null=True, upload_to=recipe_image_file_path)
 
     def __str__(self):
-        return self.title  # otherwise displays object id by default in django admin
+        return self.title
 
 
 class Tag(models.Model):

@@ -34,7 +34,7 @@ urlpatterns = [
     path('api/recipe/', include('recipe.urls')),
 ]
 
-if settings.DEBUG:  # if we run server in debugging mode
+if settings.DEBUG:
     urlpatterns += static(
         settings.MEDIA_URL,
         document_root=settings.MEDIA_ROOT,

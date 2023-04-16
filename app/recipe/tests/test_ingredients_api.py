@@ -21,12 +21,12 @@ from recipe.serializers import IngredientSerializer
 INGREDIENTS_URL = reverse('recipe:ingredient-list')
 
 
-def detail_url(ingredient_id):  # helper tool
+def detail_url(ingredient_id):
     """Create and return an ingredient detail URL."""
     return reverse('recipe:ingredient-detail', args=[ingredient_id])
 
 
-def create_user(email='user@example.com', password='testpass123'):  # helper tool
+def create_user(email='user@example.com', password='testpass123'):
     """Create and return user."""
     return get_user_model().objects.create_user(email=email, password=password)
 
@@ -83,7 +83,7 @@ class PrivateIngredientsApiTests(TestCase):
 
         payload = {'name': 'Coriander'}
         url = detail_url(ingredient.id)
-        res = self.client.patch(url, payload)  # partial update - name
+        res = self.client.patch(url, payload)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         ingredient.refresh_from_db()
@@ -122,7 +122,7 @@ class PrivateIngredientsApiTests(TestCase):
     def test_filtered_ingredients_unique(self):
         """Test filtered ingredients returns a unique list."""
         ing = Ingredient.objects.create(user=self.user, name='Eggs')
-        Ingredient.objects.create(user=self.user, name='Lentils')  # create in DB, not assigned
+        Ingredient.objects.create(user=self.user, name='Lentils')
         recipe1 = Recipe.objects.create(
             title='Eggs Benedict',
             time_minutes=60,
@@ -138,6 +138,6 @@ class PrivateIngredientsApiTests(TestCase):
         recipe1.ingredients.add(ing)
         recipe2.ingredients.add(ing)
 
-        res = self.client.get(INGREDIENTS_URL, {'assigned_only': 1})  # only assigned
+        res = self.client.get(INGREDIENTS_URL, {'assigned_only': 1})
 
-        self.assertEqual(len(res.data), 1)  # only unique
+        self.assertEqual(len(res.data), 1)

@@ -10,7 +10,7 @@ from django.test import Client
 class AdminSiteTests(TestCase):
     """Tests for Django admin."""
 
-    def setUp(self):  # make sure it is named setUp - requirements of unittests
+    def setUp(self):
         """Create user and client."""
         self.client = Client()
         self.admin_user = get_user_model().objects.create_superuser(
@@ -26,7 +26,7 @@ class AdminSiteTests(TestCase):
 
     def test_users_list(self):
         """Test that users are listed on page."""
-        url = reverse('admin:core_user_changelist')  # check how django reverse function works
+        url = reverse('admin:core_user_changelist')
         res = self.client.get(url)
 
         self.assertContains(res, self.user.name)
@@ -34,10 +34,10 @@ class AdminSiteTests(TestCase):
 
     def test_edit_user_page(self):
         """Test the edit user page works."""
-        url = reverse('admin:core_user_change', args=[self.user.id])  # set url /admin/core/user/{id}/change/
-        res = self.client.get(url)  # return url set above
+        url = reverse('admin:core_user_change', args=[self.user.id])
+        res = self.client.get(url)
 
-        self.assertEqual(res.status_code, 200)  # make sure page loads successfully with response 200
+        self.assertEqual(res.status_code, 200)
 
     def test_create_user_page(self):
         """Test the create user page works."""

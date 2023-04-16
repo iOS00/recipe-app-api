@@ -3,7 +3,7 @@ Django admin customization
 """
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.utils.translation import gettext_lazy as _  # optional, enables translations
+from django.utils.translation import gettext_lazy as _
 
 from core import models
 
@@ -26,7 +26,7 @@ class UserAdmin(BaseUserAdmin):
         ),
         (_('Import dates'), {'fields': ('last_login',)})
     )
-    readonly_fields = ['last_login']  # specify which fields to be read only
+    readonly_fields = ['last_login']
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
@@ -44,6 +44,6 @@ class UserAdmin(BaseUserAdmin):
 
 
 admin.site.register(models.User, UserAdmin)
-admin.site.register(models.Recipe)  # we use base class, no need to specify
+admin.site.register(models.Recipe)
 admin.site.register(models.Tag)
 admin.site.register(models.Ingredient)

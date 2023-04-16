@@ -2,15 +2,15 @@
 Tests for models.
 """
 from unittest.mock import patch
-from decimal import Decimal  # for storing some of recipe objects
+from decimal import Decimal
 
 from django.test import TestCase
-from django.contrib.auth import get_user_model  # recommended to get default Django user models with attr.
+from django.contrib.auth import get_user_model
 
-from core import models  # using models from a different app directory
+from core import models
 
 
-def create_user(email='user@example.com', password='testpass123'):  # helper tool
+def create_user(email='user@example.com', password='testpass123'):
     """Create and return a new user."""
     return get_user_model().objects.create_user(email, password)
 
@@ -22,15 +22,15 @@ class ModelTests(TestCase):
 
     def test_create_user_with_email_successful(self):
         """Test creating a user with an email is successful."""
-        email = 'test@example.com'  # recomended to use @example.com reserved domain for testing(avoid sending)
+        email = 'test@example.com'
         password = 'testpass123'
         user = get_user_model().objects.create_user(
             email=email,
             password=password,
         )
 
-        self.assertEqual(user.email, email)  # compare with get_user_model() attribute
-        self.assertTrue(user.check_password(password))  # compare with encrypted with hash password
+        self.assertEqual(user.email, email)
+        self.assertTrue(user.check_password(password))
 
     def test_new_user_email_normalized(self):
         """Test email is normalized for new users."""
@@ -56,8 +56,8 @@ class ModelTests(TestCase):
             'test123',
         )
 
-        self.assertTrue(user.is_superuser)  # check if created user is a Superuser
-        self.assertTrue(user.is_staff)  # check if created user is a staff (has to be)
+        self.assertTrue(user.is_superuser)
+        self.assertTrue(user.is_staff)
 
     def test_create_recipe(self):
         """Test creating a recipe is successful."""
@@ -95,7 +95,7 @@ class ModelTests(TestCase):
     @patch('core.models.uuid.uuid4')
     def test_recipe_file_name_uuid(self, mock_uuid):
         """Test generating image path."""
-        uuid = 'test-uuid'  # to set known "unique id" for testing
+        uuid = 'test-uuid'
         mock_uuid.return_value = uuid
         file_path = models.recipe_image_file_path(None, 'example.jpg')
 
