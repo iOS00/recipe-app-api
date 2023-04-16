@@ -1,7 +1,7 @@
 """
 Views for the recipe APIs.
 """
-from drf_spectacular.utils import(
+from drf_spectacular.utils import (
     extend_schema_view,
     extend_schema,
     OpenApiParameter,
@@ -23,6 +23,7 @@ from core.models import (
     Ingredient,
 )
 from recipe import serializers
+
 
 @extend_schema_view(
     list=extend_schema(
@@ -91,12 +92,13 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @extend_schema_view(
     list=extend_schema(
         parameters=[
             OpenApiParameter(
                 'assigned_only',
-                OpenApiTypes.INT, enum=[0,1],
+                OpenApiTypes.INT, enum=[0, 1],
                 description='Filter by items assigned to recipes.',
             )
         ]
@@ -108,7 +110,7 @@ class BaseRecipeAttrViewSet(mixins.DestroyModelMixin,
                             viewsets.GenericViewSet):
     """Base viewset for recipe attributes."""
     authentication_classes = [TokenAuthentication]
-    permission_classes =[IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         """Filter queryset to authenticated user."""
@@ -128,7 +130,6 @@ class TagViewSet(BaseRecipeAttrViewSet):
     """Manage tags in the database."""
     serializer_class = serializers.TagSerializer
     queryset = Tag.objects.all()
-
 
 
 class IngredientViewSet(BaseRecipeAttrViewSet):

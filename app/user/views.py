@@ -11,9 +11,9 @@ from user.serializers import (
 )
 
 
-class CreateUserView(generics.CreateAPIView):  # handles http POST request for creating objects
+class CreateUserView(generics.CreateAPIView):
     """Create a new user in the system."""
-    serializer_class = UserSerializer  # map view to our created serializer model
+    serializer_class = UserSerializer
 
 
 class CreateTokenView(ObtainAuthToken):

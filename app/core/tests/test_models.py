@@ -16,7 +16,6 @@ def create_user(email='user@example.com', password='testpass123'):
 
 
 
-
 class ModelTests(TestCase):
     """Test models."""
 
